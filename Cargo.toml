@@ -1,0 +1,28 @@
+[package]
+name = "sqlite-ext-core"
+version = "0.1.0"
+edition = "2021"
+authors = ["Dilip Vamsi"]
+description = "High-performance shared state registry for sqlite extensions"
+
+[dependencies]
+# Sharded concurrent hashmap to prevent lock contention
+dashmap = "5.5"
+# Fastest non-cryptographic hasher for string keys
+ahash = "0.8"
+# Raw SQLite bindings
+libsqlite3-sys = { version = "0.36.0", features = ["pkg-config"] }
+
+# Your custom library for stack-allocated strings
+# https://crates.io/crates/small-collections
+small-collections = "0.6.0"
+
+[dev-dependencies]
+# We use bundled to compile a fresh SQLite C-core for the tests
+rusqlite = { version = "0.38", features = ["bundled"] }
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(tarpaulin)'] }
+
+[lib]
+crate-type = ["rlib"]
